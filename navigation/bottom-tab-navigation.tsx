@@ -1,7 +1,7 @@
 import { BottomTabNavigationOptions, createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import React, { FC } from 'react';
 import { useTheme } from '@rneui/themed';
-import { createTripsTabConfig } from '../trips';
+import { tripsTabConfig } from '../trips';
 import { RootStackParamList } from './types';
 
 const Tab = createBottomTabNavigator<RootStackParamList>();
@@ -10,16 +10,14 @@ const { Navigator, Screen } = Tab;
 
 export const BottomTabNavigation: FC = () =>{
     const { theme } = useTheme();
-    const screenCommonOptions: BottomTabNavigationOptions = {
-        tabBarActiveTintColor: theme.colors.primary
-    }
+   
     const navigatorProps: { screenOptions: BottomTabNavigationOptions }  = {
         screenOptions:{
             tabBarStyle: {
-                backgroundColor: theme.colors.secondary,
-                borderTopColor: theme.colors.secondary,
+                backgroundColor: theme.colors.primary,
+                borderTopColor: theme.colors.primary,
             },
-            tabBarActiveTintColor: "#fff",
+            tabBarActiveTintColor: theme.colors.secondary,
             headerShown: false,
         }
     }
@@ -28,7 +26,7 @@ export const BottomTabNavigation: FC = () =>{
             initialRouteName='Trips'
             { ...navigatorProps}
         >
-            <Screen { ...createTripsTabConfig(screenCommonOptions) }/>
+            <Screen { ...tripsTabConfig }/>
         </Navigator>
     )
 }

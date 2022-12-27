@@ -13,11 +13,10 @@ BottomTabNavigationOptions,
 BottomTabNavigationEventMap
 >;
 
-export const createTripsTabConfig = ( commonOptions: BottomTabNavigationOptions = {} ):TripsScreenConfig =>({
+export const tripsTabConfig:TripsScreenConfig = {
     name: "Trips",
     component: TripsTab,
     options: {
-        ...commonOptions,
         tabBarIcon: ({size, color}) => <Entypo name="map" size={size} color={color}/>
     }
-})
+}
