@@ -1,19 +1,34 @@
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { BottomTabNavigationOptions, createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import React, { FC } from 'react';
-import { Text } from 'react-native';
+import { useTheme } from '@rneui/themed';
+import { createTripsTabConfig } from '../trips';
+import { RootStackParamList } from './types';
 
-const Tab = createBottomTabNavigator();
+const Tab = createBottomTabNavigator<RootStackParamList>();
 
 const { Navigator, Screen } = Tab;
 
-const TestHomeScreen = () => <Text>Home Screen</Text>
-
 export const BottomTabNavigation: FC = () =>{
+    const { theme } = useTheme();
+    const screenCommonOptions: BottomTabNavigationOptions = {
+        tabBarActiveTintColor: theme.colors.primary
+    }
+    const navigatorProps: { screenOptions: BottomTabNavigationOptions }  = {
+        screenOptions:{
+            tabBarStyle: {
+                backgroundColor: theme.colors.secondary,
+                borderTopColor: theme.colors.secondary,
+            },
+            tabBarActiveTintColor: "#fff",
+            headerShown: false,
+        }
+    }
     return (
         <Navigator
-            initialRouteName='Home'
+            initialRouteName='Trips'
+            { ...navigatorProps}
         >
-            <Screen name="Home" component={TestHomeScreen} />
+            <Screen { ...createTripsTabConfig(screenCommonOptions) }/>
         </Navigator>
     )
 }
