@@ -4,6 +4,7 @@ import { makeStyles } from "@rneui/themed";
 
 export const TripsTab: FC = () =>{
     const s = useTripsTabStyle();
+   
     return (
         <PMView style={s.container}>
             <PMText h2>Trips Page</PMText>

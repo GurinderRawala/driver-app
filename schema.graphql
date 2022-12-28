@@ -1,0 +1,74 @@
+"""Exposes a URL that specifies the behaviour of this scalar."""
+directive @specifiedBy(
+  """The URL that specifies the behaviour of this scalar."""
+  url: String!
+) on SCALAR
+
+"""
+A special custom Scalar type for Dates that converts to a ISO formatted string 
+"""
+scalar Date
+
+type driver {
+  id: String!
+  firstname: String!
+  lastname: String!
+  phone: String!
+  email: String!
+  password: String!
+  driver_id: String!
+  drivers_licence: String!
+  licence_state: String!
+  truckno: String!
+  clientid: String!
+  address: [String]!
+  awaitingSignup: Boolean!
+  filepath: [String]
+  reg_date: Date!
+  createdAt: Date!
+  updatedAt: Date!
+}
+
+"""Query data from driver app graphql"""
+type Query {
+  findAssignedTrips: [trip]
+  driverInfo: driver
+  findTrailers(
+    """TrailerNO. to find"""
+    trailerNo: String
+
+    """Trailer to find by trailer uuid"""
+    id: ID
+  ): [trailer]
+}
+
+type trailer {
+  id: String!
+  clientid: String!
+  trailerAttributes: String!
+  model: String!
+  make: String!
+  year: String!
+  trailerNo: String!
+  vinNumber: String
+  licencePlate: String!
+  licenceState: String!
+  safetyExpire: String!
+  filepath: [String]
+  notes: String
+  createdAt: Date!
+  updatedAt: Date!
+}
+
+type trip {
+  id: String!
+  tripId: Int!
+  clientid: String!
+  assignedTo: String!
+  tripInfo: [String]!
+  bol: [String]
+  pod: [String]
+  createdAt: Date!
+  updatedAt: Date!
+}
+
