@@ -1,12 +1,15 @@
-import { Text, TextProps, makeStyles } from "@rneui/themed";
+import { Text, TextProps, ThemeMode, makeStyles, useThemeMode } from "@rneui/themed";
 import React, { FC, useEffect, useRef } from "react";
 import { merge } from 'lodash';
-import { StatusBar, View, ViewProps, Image, Animated, Easing } from "react-native";
+import { StatusBar, View, ViewProps, Image, Animated, Easing, StatusBarProps, ScrollViewProps, ScrollView } from "react-native";
 import { EvilIcons } from '@expo/vector-icons'; 
 
 import { useLoadExpoFont } from "../theme/hooks";
 
-const STATUS_BAR_STYLE = "light-content";
+const STATUS_BAR_STYLE: Record<ThemeMode, StatusBarProps["barStyle"]> = {
+    light: "dark-content",
+    dark: "light-content"
+};
 const SPINNER_ICON_SIZE = 55;
 
 export const PMText: FC<TextProps> = (props) =>{
@@ -72,18 +75,36 @@ export const PMView: FC<ViewProps> = (props) =>{
 }
 
 export const PMStatusBar: FC = () =>{
+    const { mode } = useThemeMode();
     const style = useStyles();
-    return  <StatusBar barStyle={STATUS_BAR_STYLE} backgroundColor={style.statusbar.backgroundColor} />
+    return  <StatusBar barStyle={STATUS_BAR_STYLE[mode]} backgroundColor={style.statusbar.backgroundColor} />
+}
+const SCROLL_VIEW_DEFAULT_PADDING = 75;
+export const PMScrollView: FC<ScrollViewProps> = (props) =>{
+    const  { onLayoutRootView, isFontLoaded } = useLoadExpoFont();
+    const style = useStyles();
+    const assignableProps: ScrollViewProps = {
+        ...props,
+        style: merge({}, props.style, style.view, {paddingTop: SCROLL_VIEW_DEFAULT_PADDING}),
+        onLayout: onLayoutRootView
+    }
+    if(!isFontLoaded){
+        return <PMLoadingSpinner />
+    }
+    return(
+        <ScrollView {...assignableProps}/>
+    )
 }
 
 export const useStyles = makeStyles((theme) => ({
     text: {
-        fontFamily: "Titillium",
-        color: theme.colors.black
+        fontFamily: "Titillium-regular",
+        color: theme.colors.black,
+        fontWeight: "200"
     },
     view: {
         backgroundColor: theme.colors.background,
-        padding: 2
+        padding: 1
     },
     statusbar: {
         backgroundColor: theme.colors.black

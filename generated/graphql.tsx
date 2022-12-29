@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -17,6 +18,7 @@ export type Scalars = {
 /** Query data from driver app graphql */
 export type Query = {
   readonly driverInfo: Maybe<Driver>;
+  readonly findAssignedLoads: Maybe<ReadonlyArray<Maybe<Load>>>;
   readonly findAssignedTrips: Maybe<ReadonlyArray<Maybe<Trip>>>;
   readonly findTrailers: Maybe<ReadonlyArray<Maybe<Trailer>>>;
 };
@@ -45,6 +47,27 @@ export type Driver = {
   readonly phone: Scalars['String'];
   readonly reg_date: Scalars['Date'];
   readonly truckno: Scalars['String'];
+  readonly updatedAt: Scalars['Date'];
+};
+
+export type Load = {
+  readonly assignedTo: Maybe<Scalars['String']>;
+  readonly brokerId: Scalars['String'];
+  readonly clientid: Scalars['String'];
+  readonly commodity: Maybe<Scalars['String']>;
+  readonly createdAt: Scalars['Date'];
+  readonly filepath: Maybe<ReadonlyArray<Maybe<Scalars['String']>>>;
+  readonly hazmat: Scalars['Boolean'];
+  readonly id: Scalars['String'];
+  readonly loadId: Maybe<Scalars['Int']>;
+  readonly poNumber: Scalars['String'];
+  readonly receiver: ReadonlyArray<Maybe<Scalars['String']>>;
+  readonly shipper: ReadonlyArray<Maybe<Scalars['String']>>;
+  readonly specialInstructions: Maybe<Scalars['String']>;
+  readonly state: Scalars['String'];
+  readonly totalWeight: Maybe<Scalars['String']>;
+  readonly trailerNo: Maybe<Scalars['String']>;
+  readonly tripId: Maybe<Scalars['String']>;
   readonly updatedAt: Scalars['Date'];
 };
 
@@ -77,3 +100,8 @@ export type Trip = {
   readonly tripInfo: ReadonlyArray<Maybe<Scalars['String']>>;
   readonly updatedAt: Scalars['Date'];
 };
+
+export type FindAssignedTripsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type FindAssignedTripsQuery = { readonly findAssignedTrips: ReadonlyArray<{ readonly id: string, readonly tripId: number, readonly bol: ReadonlyArray<string | null> | null, readonly assignedTo: string, readonly tripInfo: ReadonlyArray<string | null>, readonly createdAt: any, readonly updatedAt: any }> };

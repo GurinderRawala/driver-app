@@ -29,6 +29,27 @@ type driver {
   updatedAt: Date!
 }
 
+type load {
+  id: String!
+  clientid: String!
+  assignedTo: String
+  tripId: String
+  brokerId: String!
+  loadId: Int
+  state: String!
+  shipper: [String]!
+  receiver: [String]!
+  poNumber: String!
+  trailerNo: String
+  commodity: String
+  hazmat: Boolean!
+  totalWeight: String
+  filepath: [String]
+  specialInstructions: String
+  createdAt: Date!
+  updatedAt: Date!
+}
+
 """Query data from driver app graphql"""
 type Query {
   findAssignedTrips: [trip]
@@ -40,6 +61,7 @@ type Query {
     """Trailer to find by trailer uuid"""
     id: ID
   ): [trailer]
+  findAssignedLoads: [load]
 }
 
 type trailer {

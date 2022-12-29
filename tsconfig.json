@@ -1,6 +1,12 @@
 {
   "extends": "expo/tsconfig.base",
   "compilerOptions": {
-    "strict": true
-  }
+    "strict": true,
+    "allowJs": true,
+    "esModuleInterop": true,
+    "baseUrl": "./",
+  },
+  "include": ["**/*.ts", "**/*.tsx"],
+  "files": [".eslintrc.json"],
+  "exclude": ["node_modules", "dist"]
 }

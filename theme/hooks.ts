@@ -2,14 +2,12 @@ import { useCallback } from "react";
 import * as SplashScreen from 'expo-splash-screen';
 import { useFonts } from "expo-font";
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-import TFont from "../assets/font/TitilliumWeb-Black.ttf";
+import { PER_MILES_FONT } from "../assets/font";
 
 SplashScreen.preventAutoHideAsync();
 
 export const useLoadExpoFont = () =>{
-    const [isFontLoaded] = useFonts({'Titillium': TFont})
+    const [isFontLoaded] = useFonts(PER_MILES_FONT)
     const onLayoutRootView = useCallback(async () => {
         if (isFontLoaded) {
             await SplashScreen.hideAsync();

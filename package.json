@@ -9,7 +9,7 @@
     "web": "expo start --web",
     "lint:fix": "eslint . --fix",
     "graphql:generate": "graphql-codegen --config codegen.ts",
-    "graphql:schema": "npx get-graphql-schema https://localhost:8081/driver-app/graphql > schema.graphql"
+    "graphql:schema": "npx get-graphql-schema http://localhost:8081/driver-app/graphql > schema.graphql"
   },
   "dependencies": {
     "@expo/ngrok": "^4.1.0",
@@ -46,6 +46,8 @@
     "@types/react-native": "~0.69.1",
     "@typescript-eslint/eslint-plugin": "^5.41.0",
     "@typescript-eslint/parser": "^5.41.0",
+    "babel-plugin-jest-hoist": "^29.2.0",
+    "babel-plugin-module-resolver": "^4.1.0",
     "eslint": "^8.26.0",
     "eslint-plugin-react": "^7.31.10",
     "get-graphql-schema": "^2.1.2",
