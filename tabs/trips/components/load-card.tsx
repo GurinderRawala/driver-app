@@ -34,8 +34,8 @@ export const mapToKeysAndValues = (info: Record<string, string>, index: number) 
         <View key={index}>
             {
                 keys.map((key, index) =>(
-                    <View key={[key,index].join("-")}>
-                        <PMText style={styles.infoTitle}>{key.toUpperCase()}</PMText>
+                    <View key={[key,index].join("-")} style={styles.infoContainer}>
+                        <PMText style={styles.infoTitle}>{key.toUpperCase()}:</PMText>
                         <PMText style={styles.info}>{info[key]}</PMText>
                     </View>
                 ))
@@ -62,19 +62,18 @@ export const useTripsCardStyles = makeStyles(
                 alignItems: "flex-start",
             },
             infoContainer:{
-                flex: 1,
                 flexDirection: "row",
                 justifyContent: "flex-start",
                 alignItems: "center",
-                padding: 5
+                width: "100%"
             },
             infoTitle:{
-                flex: 2,
+                width: "20%",
                 fontWeight: "900",
                 textAlign: "left"
             },
             info:{
-                flex: 3,
+                width: "80%",
                 fontWeight: "600",
                 textAlign: "left"
             }

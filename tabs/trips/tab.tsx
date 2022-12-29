@@ -1,12 +1,12 @@
 import React, { FC } from "react";
-import { makeStyles } from "@rneui/themed";
+import { Card, makeStyles } from "@rneui/themed";
 import { useAssignedTrips } from "./hooks";
 
 import { FlatList, View } from "react-native";
 
 import { LoadCard } from "./components/load-card";
 import { FindAssignedTripsQuery, Load } from "generated/graphql";
-import { PMLoadingSpinner, PMView } from "components/shared";
+import { PMLoadingSpinner, PMText, PMView } from "components/shared";
 
 export const TripsTab: FC = () =>{
     const s = useTripsTabStyle();
@@ -17,9 +17,10 @@ export const TripsTab: FC = () =>{
 
     const renderItem = ({item}: { item: FindAssignedTripsQuery["findAssignedTrips"][number]}) =>{
         const tripInfo: Load[] = item?.tripInfo.map(load => JSON.parse(load as string));
-        
         return (
             <View>
+                <PMText h3 style={s.tripNumber}>Trip: {item.tripId}</PMText>
+                <Card.Divider />
                 {
                     tripInfo.map((info) => <LoadCard tripInfo={info} key={info.id}/>)
                 }
@@ -49,6 +50,9 @@ export const useTripsTabStyle =  makeStyles(
             flex: 1,
             justifyContent: 'space-evenly',
             paddingTop: 75,
+        },
+        tripNumber: {
+            textAlign: 'center',
         }
     })
 )

@@ -2,7 +2,7 @@ import { useCallback } from "react";
 import * as SplashScreen from 'expo-splash-screen';
 import { useFonts } from "expo-font";
 
-import { PER_MILES_FONT } from "../assets/font";
+import { PER_MILES_FONT } from "assets/font";
 
 SplashScreen.preventAutoHideAsync();
 
