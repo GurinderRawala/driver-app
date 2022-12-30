@@ -5,14 +5,15 @@ import { Load, Maybe } from "generated/graphql";
 import { PMCard } from "components/cards";
 import { PMText } from "components/shared";
 import { LayoutReducer } from "store/slices";
-import { getStoreState } from "store";
+import { PMStoreState } from "store";
+import { useSelector } from "react-redux";
 
 export interface LoadCardProps{
     tripInfo: Load;
 }
 export const LoadCard: FC<LoadCardProps> = ({tripInfo}) =>{
-    const { layoutReducer } = getStoreState()
-    const styles = useTripsCardStyles(layoutReducer);
+    const layout = useSelector(({layoutReducer}: PMStoreState) => layoutReducer);
+    const styles = useTripsCardStyles(layout);
     const shipperInfo = tripInfo.shipper.map(parseJSON);
     const receiverInfo = tripInfo.receiver.map(parseJSON);
     return (
