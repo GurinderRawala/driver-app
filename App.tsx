@@ -4,16 +4,19 @@ import { BottomTabNavigation } from './navigation';
 import { PMThemeProvider } from './theme';
 import { PMStatusBar } from './components/shared';
 import { PMQueryProvider } from './api';
+import { PMReduxProvider } from 'store';
 
 const App: FC = () => (
-    <PMQueryProvider>
-        <PMThemeProvider>
-            <PMStatusBar />
-            <NavigationContainer>
-                <BottomTabNavigation />
-            </NavigationContainer>
-        </PMThemeProvider>
-    </PMQueryProvider>
+    <PMReduxProvider>
+        <PMQueryProvider>
+            <PMThemeProvider>
+                <PMStatusBar />
+                <NavigationContainer>
+                    <BottomTabNavigation />
+                </NavigationContainer>
+            </PMThemeProvider>
+        </PMQueryProvider>
+    </PMReduxProvider>
 )
 
 export default App;

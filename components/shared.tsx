@@ -1,10 +1,11 @@
 import { Text, TextProps, ThemeMode, makeStyles, useThemeMode } from "@rneui/themed";
 import React, { FC, useEffect, useRef } from "react";
 import { merge } from 'lodash';
-import { StatusBar, View, ViewProps, Image, Animated, Easing, StatusBarProps, ScrollViewProps, ScrollView } from "react-native";
+import { StatusBar, View, ViewProps, Image, Animated, Easing, StatusBarProps, ScrollViewProps, ScrollView, LayoutChangeEvent } from "react-native";
 import { EvilIcons } from '@expo/vector-icons'; 
 
 import { useLoadExpoFont } from "../theme/hooks";
+import { updateLayoutStore } from "store";
 
 const STATUS_BAR_STYLE: Record<ThemeMode, StatusBarProps["barStyle"]> = {
     light: "dark-content",
@@ -56,13 +57,21 @@ export const PMLoadingSpinner: FC = () =>{
     )
 }
 
+export const onStroreLayout = (e: LayoutChangeEvent): void =>{
+    const {width,height} = e.nativeEvent.layout;
+    updateLayoutStore("updateLayoutStore", {width, height});
+}
+
 export const PMView: FC<ViewProps> = (props) =>{
     const  { onLayoutRootView, isFontLoaded } = useLoadExpoFont();
     const style = useStyles();
     const assignableProps: ViewProps = {
         ...props,
         style: merge({}, props.style, style.view),
-        onLayout: onLayoutRootView
+        onLayout: (e: LayoutChangeEvent) => {
+            onStroreLayout(e);
+            onLayoutRootView()
+        }
     }
 
     if(!isFontLoaded){
@@ -86,7 +95,10 @@ export const PMScrollView: FC<ScrollViewProps> = (props) =>{
     const assignableProps: ScrollViewProps = {
         ...props,
         style: merge({}, props.style, style.view, {paddingTop: SCROLL_VIEW_DEFAULT_PADDING}),
-        onLayout: onLayoutRootView
+        onLayout: (e: LayoutChangeEvent) => {
+            onStroreLayout(e);
+            onLayoutRootView()
+        }
     }
     if(!isFontLoaded){
         return <PMLoadingSpinner />

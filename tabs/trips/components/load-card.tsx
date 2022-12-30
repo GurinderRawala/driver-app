@@ -4,12 +4,15 @@ import { View } from "react-native";
 import { Load, Maybe } from "generated/graphql";
 import { PMCard } from "components/cards";
 import { PMText } from "components/shared";
+import { LayoutReducer } from "store/slices";
+import { getStoreState } from "store";
 
 export interface LoadCardProps{
     tripInfo: Load;
 }
 export const LoadCard: FC<LoadCardProps> = ({tripInfo}) =>{
-    const styles = useTripsCardStyles();
+    const { layoutReducer } = getStoreState()
+    const styles = useTripsCardStyles(layoutReducer);
     const shipperInfo = tripInfo.shipper.map(parseJSON);
     const receiverInfo = tripInfo.receiver.map(parseJSON);
     return (
@@ -46,11 +49,13 @@ export const mapToKeysAndValues = (info: Record<string, string>, index: number) 
 
 export const parseJSON = (info: Maybe<string>) => JSON.parse(info as string)
 
+const MAIN_CONTAINER_PADDING = 28;
+
 export const useTripsCardStyles = makeStyles(
-    () => (
+    (_, props: LayoutReducer) => (
         {
             container: {
-                width: 400
+                width: props.width - MAIN_CONTAINER_PADDING
             },
             heading: {
                 textAlign: "center"
