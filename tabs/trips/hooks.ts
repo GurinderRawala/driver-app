@@ -5,17 +5,59 @@ import { FindAssignedTripsQuery } from "../../generated/graphql";
 import { GraphQLError } from "graphql";
 
 export const findAssignedTripsGQL = gql`
-    query findAssignedTrips{
-        findAssignedTrips{
-            id
-            tripId
-            bol
-            assignedTo
-            tripInfo
-            createdAt
-            updatedAt
-        }
-    }
+query findAssignedTrips(
+    $where: tripInput
+    $orderBy: String 
+){
+	findAssignedTrips(
+        where: $where
+        orderBy: $orderBy
+    ){
+		id
+		state
+		tripId
+		assignedTo
+		totalMiles
+		bol
+		pod
+		tripInfo {
+			id
+			assignedTo
+			commodity
+			poNumber
+			brokerId
+			hazmat
+			specialInstructions
+			shipper{
+				shipperName 
+				address{
+					unitNumber 
+					streetName 
+					city 
+					state 
+					postalCode 
+					country
+			 } 
+				phoneNumber 
+				email
+			}
+			receiver{
+				receiverName 
+				address{
+					unitNumber 
+					streetName 
+					city state 
+					postalCode 
+					country
+				} 
+				phoneNumber 
+				email
+			}
+			trailerNo
+			totalWeight
+		}
+	}
+}
 `;
 
 export type UseAssignedTrips = () => {
@@ -26,7 +68,7 @@ export type UseAssignedTrips = () => {
 }
 
 export const useAssignedTrips: UseAssignedTrips = () => {
-    const { data, isError, error, isLoading } = useGqlQuery<FindAssignedTripsQuery>(QUERY_KEY.ASSIGNED_TRIPS, findAssignedTripsGQL, {});
+    const { data, isError, error, isLoading } = useGqlQuery<FindAssignedTripsQuery>(QUERY_KEY.ASSIGNED_TRIPS, findAssignedTripsGQL, { orderBy: "DESC" });
 
     return {
         data,

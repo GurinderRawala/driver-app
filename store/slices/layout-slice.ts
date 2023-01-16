@@ -9,13 +9,13 @@ export const layoutInitialState: LayoutReducer = {
     width: 0,
 }
 
-export type UpdateActionLayoutStice = { payload: { type: string | undefined, payload: LayoutReducer } };
+export type UpdateActionLayoutSlice = { payload: { type: string | undefined, payload: LayoutReducer } };
 
 export const layoutSlice = createSlice({
     name: 'layoutSlice',
     initialState: layoutInitialState,
     reducers: {
-        updateLayoutSlice: (state, action: UpdateActionLayoutStice) =>{
+        updateLayoutSlice: (state, action: UpdateActionLayoutSlice) =>{
             const { payload } = action.payload;
             return{
                 ...state,

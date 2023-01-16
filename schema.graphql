@@ -4,6 +4,27 @@ directive @specifiedBy(
   url: String!
 ) on SCALAR
 
+"""Address information"""
+type addressOutput {
+  """Unit number of bussiness or house number"""
+  unitNumber: String!
+
+  """Street name"""
+  streetName: String!
+
+  """Name of the city"""
+  city: String!
+
+  """Name of the state/province"""
+  state: String!
+
+  """Name of the country"""
+  country: String
+
+  """Postal code for the address important"""
+  postalCode: String!
+}
+
 """
 A special custom Scalar type for Dates that converts to a ISO formatted string 
 """
@@ -50,18 +71,120 @@ type load {
   updatedAt: Date!
 }
 
+input loadInput {
+  id: String
+  clientid: String
+  assignedTo: String
+  tripId: String
+  brokerId: String
+  loadId: Int
+  state: String
+  shipper: [String]
+  receiver: [String]
+  poNumber: String
+  trailerNo: String
+  commodity: String
+  hazmat: Boolean
+  totalWeight: String
+  filepath: [String]
+  specialInstructions: String
+  createdAt: Date
+  updatedAt: Date
+}
+
+"""Loads output information"""
+type loadModifiedOutput {
+  """The uuid of load, automatically generated if not provided"""
+  id: ID!
+
+  """Load assigned to (driverId: uuid)"""
+  assignedTo: ID
+
+  """Load brokerId (brokerId: uuid)"""
+  brokerId: String
+
+  """List of receivers (receiver: [string])"""
+  receiver: [receiverOutput]!
+
+  """List of shippers (shipper: [string])"""
+  shipper: [shipperOutput]!
+
+  """Commodity of the load (commodity: string)"""
+  commodity: String
+
+  """Is load is hazmat yes or no? (hazmat: boolean)"""
+  hazmat: Boolean!
+
+  """Po number (poNumber: string)"""
+  poNumber: String
+
+  """Special instructions (specialInstructions: string)"""
+  specialInstructions: String
+
+  """State (state: string), CREATED | ASSIGNED | MOVING | DELIVERED | PAID"""
+  state: String!
+
+  """Assigned Trailer number (trailerNo: string)"""
+  trailerNo: String
+
+  """Total weight (totalWeight: string)"""
+  totalWeight: String
+}
+
 """Query data from driver app graphql"""
 type Query {
-  findAssignedTrips: [trip]
-  driverInfo: driver
-  findTrailers(
-    """TrailerNO. to find"""
-    trailerNo: String
+  findAssignedTrips(
+    """Find record using where expression"""
+    where: tripInput
 
-    """Trailer to find by trailer uuid"""
-    id: ID
+    """Field to order by"""
+    orderBy: String
+  ): [TripModifiedOutput]
+  driverInfo: driver
+  trailers(
+    """Find record using where expression"""
+    where: trailerInput
+
+    """Field to order by"""
+    orderBy: String
   ): [trailer]
-  findAssignedLoads: [load]
+  findAssignedLoads(
+    """Find record using where expression"""
+    where: loadInput
+
+    """Field to order by"""
+    orderBy: String
+  ): [load]
+}
+
+"""Receiver infomation"""
+type receiverOutput {
+  """The name of the receiver"""
+  receiverName: String!
+
+  """Address of the receiver"""
+  address: addressOutput!
+
+  """Phone number of the receiver"""
+  phoneNumber: String
+
+  """Email of the receiver"""
+  email: String
+}
+
+"""Shipper infomation"""
+type shipperOutput {
+  """The name of the shipper"""
+  shipperName: String!
+
+  """Address of the shipper"""
+  address: addressOutput!
+
+  """Phone number of the shipper"""
+  phoneNumber: String
+
+  """Email of the shipper"""
+  email: String
 }
 
 type trailer {
@@ -82,15 +205,62 @@ type trailer {
   updatedAt: Date!
 }
 
-type trip {
-  id: String!
-  tripId: Int!
-  clientid: String!
-  assignedTo: String!
-  tripInfo: [String]!
+input trailerInput {
+  id: String
+  clientid: String
+  trailerAttributes: String
+  model: String
+  make: String
+  year: String
+  trailerNo: String
+  vinNumber: String
+  licencePlate: String
+  licenceState: String
+  safetyExpire: String
+  filepath: [String]
+  notes: String
+  createdAt: Date
+  updatedAt: Date
+}
+
+input tripInput {
+  id: String
+  tripId: Int
+  state: String
+  clientid: String
+  assignedTo: String
+  tripInfo: [String]
   bol: [String]
   pod: [String]
-  createdAt: Date!
-  updatedAt: Date!
+  totalMiles: Float
+  createdAt: Date
+  updatedAt: Date
+}
+
+"""Trip output fields"""
+type TripModifiedOutput {
+  """The ID of the trip, automatically generated"""
+  id: ID!
+
+  """The driver ID of the assigned driver"""
+  assignedTo: ID!
+
+  """The trip information"""
+  tripInfo: [loadModifiedOutput]!
+
+  """State (state: string), CREATED | ASSIGNED | MOVING | DELIVERED | PAID"""
+  state: String!
+
+  """Total miles of the trip"""
+  totalMiles: Float
+
+  """BOL of the trip, aws file download link"""
+  bol: [String]
+
+  """POD of the trip, aws file download link"""
+  pod: [String]
+
+  """Trip id number, automatically generated"""
+  tripId: Int!
 }
 

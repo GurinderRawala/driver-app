@@ -5,25 +5,27 @@ import { useAssignedTrips } from "./hooks";
 import { FlatList, View } from "react-native";
 
 import { LoadCard } from "./components/load-card";
-import { FindAssignedTripsQuery, Load } from "generated/graphql";
-import { PMLoadingSpinner, PMText, PMView } from "components/shared";
+import { FindAssignedTripsQuery, LoadModifiedOutput } from "generated/graphql";
+import { PMLoadingOrError, PMText, PMView } from "components/shared";
 
 export const TripsTab: FC = () =>{
     const s = useTripsTabStyle();
     const { data, isError, isLoading } = useAssignedTrips();
-    if(isLoading){
-        return <PMLoadingSpinner />
+    if(isLoading || isError){
+        return <PMLoadingOrError isError={isError} isLoading={isLoading} />
     }
 
-    const renderItem = ({item}: { item: FindAssignedTripsQuery["findAssignedTrips"][number]}) =>{
-        const tripInfo: Load[] = item?.tripInfo.map(load => JSON.parse(load as string));
+    const renderItem = ({item}:{ item: FindAssignedTripsQuery["findAssignedTrips"][number] }) =>{
+    
         return (
             <View>
                 <PMText h3 style={s.tripNumber}>Trip: {item.tripId}</PMText>
                 <Card.Divider />
-                {
-                    tripInfo.map((info) => <LoadCard tripInfo={info} key={info.id}/>)
-                }
+                <FlatList 
+                    data={item.tripInfo}
+                    renderItem={({item}) => <LoadCard tripInfo={item as LoadModifiedOutput} key={item.id}/>}
+                    keyExtractor={(item) => item?.id}
+                />
             </View>
         )
     }

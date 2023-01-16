@@ -1,9 +1,10 @@
 {
   "extends": "expo/tsconfig.base",
   "compilerOptions": {
-    "strict": true,
+    "alwaysStrict": true,
     "allowJs": true,
     "esModuleInterop": true,
+    "noImplicitAny": true,
     "baseUrl": "./",
   },
   "include": ["**/*.ts", "**/*.tsx"],
