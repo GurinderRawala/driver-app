@@ -1,14 +1,8 @@
 import { makeStyles } from "@rneui/themed";
-import { LayoutReducer } from "store/slices";
-
-const MAIN_CONTAINER_PADDING = 28;
 
 export const useTripsCardStyles = makeStyles(
-    (_, props: LayoutReducer) => (
+    () => (
         {
-            container: {
-                width: props.width - MAIN_CONTAINER_PADDING
-            },
             heading: {
                 textAlign: "center"
             },

@@ -1,8 +1,9 @@
 import { gql } from "graphql-request";
-import { useGqlQuery } from "../../api";
+import { useGqlMutation, useGqlQuery } from "api";
 import { QUERY_KEY } from "../../contants";
-import { FindAssignedTripsQuery } from "../../generated/graphql";
+import { FindAssignedTripsQuery, ResponseToTripMutation } from "generated/graphql";
 import { GraphQLError } from "graphql";
+import { QueryObserverResult, RefetchOptions, RefetchQueryFilters, UseMutateFunction } from "react-query";
 
 export const findAssignedTripsGQL = gql`
 query findAssignedTrips(
@@ -65,15 +66,50 @@ export type UseAssignedTrips = () => {
     isError: boolean;
     error: GraphQLError | null;
     isLoading: boolean;
+	refetchTrips: <TPageData>(options?: RefetchOptions & RefetchQueryFilters<TPageData>) => Promise<QueryObserverResult<FindAssignedTripsQuery, GraphQLError>>
 }
 
 export const useAssignedTrips: UseAssignedTrips = () => {
-    const { data, isError, error, isLoading } = useGqlQuery<FindAssignedTripsQuery>(QUERY_KEY.ASSIGNED_TRIPS, findAssignedTripsGQL, { orderBy: "DESC" });
+    const { data, isError, error, isLoading, refetch } = useGqlQuery<FindAssignedTripsQuery>([QUERY_KEY.ASSIGNED_TRIPS, findAssignedTripsGQL], findAssignedTripsGQL, { orderBy: "DESC" });
 
     return {
         data,
         isError,
         error,
+        isLoading,
+        refetchTrips: refetch
+    }
+}
+
+
+export const responseToTripGQL = gql`
+	mutation responseToTrip(
+		$driverResponse: driverResponseEnum!
+		$id: ID!
+	){
+		responseToTrip(driverResponse: $driverResponse, id: $id){
+			id
+			tripId
+			state
+			totalMiles
+		}
+	}
+`;
+
+export type UseResponseToTrip = () => {
+	updateTripState: UseMutateFunction<ResponseToTripMutation, unknown, ResponseToTripMutation, unknown>;
+	data: ResponseToTripMutation;
+	isError: boolean;
+	isLoading: boolean;
+}
+
+export const useResponseToTrip = () =>{
+    const { mutate, data, isError, isLoading } = useGqlMutation<ResponseToTripMutation, unknown, ResponseToTripMutation>(responseToTripGQL)
+
+    return{
+        updateTripState: mutate,
+        data,
+        isError,
         isLoading
     }
 }

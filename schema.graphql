@@ -1,3 +1,8 @@
+schema {
+  query: Query
+  mutation: driverMutations
+}
+
 """Exposes a URL that specifies the behaviour of this scalar."""
 directive @specifiedBy(
   """The URL that specifies the behaviour of this scalar."""
@@ -48,6 +53,28 @@ type driver {
   reg_date: Date!
   createdAt: Date!
   updatedAt: Date!
+}
+
+"""Driver app mutations"""
+type driverMutations {
+  responseToTrip(
+    """Driver accept or reject load"""
+    driverResponse: driverResponseEnum!
+
+    """Trip uuid which is updating"""
+    id: ID!
+  ): TripModifiedOutput
+}
+
+enum driverResponseEnum {
+  CREATED
+  PENDING
+  ACCEPTED
+  MOVING
+  LOADING
+  LOADED
+  DELIVERING
+  DELIVERED
 }
 
 type load {
@@ -157,7 +184,7 @@ type Query {
   ): [load]
 }
 
-"""Receiver infomation"""
+"""Receiver information"""
 type receiverOutput {
   """The name of the receiver"""
   receiverName: String!
@@ -170,9 +197,18 @@ type receiverOutput {
 
   """Email of the receiver"""
   email: String
+
+  """Arrival at the receiver"""
+  arrival: String
+
+  """Depart at the receiver"""
+  depart: String
+
+  """Delivery appointment date and time"""
+  deliveryAppointment: String
 }
 
-"""Shipper infomation"""
+"""Shipper information"""
 type shipperOutput {
   """The name of the shipper"""
   shipperName: String!
@@ -185,6 +221,15 @@ type shipperOutput {
 
   """Email of the shipper"""
   email: String
+
+  """Arrival at the shipper"""
+  arrival: String
+
+  """Depart at the shipper"""
+  depart: String
+
+  """Pick up appointment date and time"""
+  pickUpAppointment: String
 }
 
 type trailer {

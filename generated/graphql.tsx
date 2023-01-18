@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -11,7 +12,6 @@ export type Scalars = {
   Int: number;
   Float: number;
   /** A special custom Scalar type for Dates that converts to a ISO formatted string  */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   Date: any;
 };
 
@@ -100,6 +100,29 @@ export type Driver = {
   readonly updatedAt: Scalars['Date'];
 };
 
+/** Driver app mutations */
+export type DriverMutations = {
+  readonly responseToTrip: Maybe<TripModifiedOutput>;
+};
+
+
+/** Driver app mutations */
+export type DriverMutationsResponseToTripArgs = {
+  driverResponse: DriverResponseEnum;
+  id: Scalars['ID'];
+};
+
+export enum DriverResponseEnum {
+  Accepted = 'ACCEPTED',
+  Created = 'CREATED',
+  Delivered = 'DELIVERED',
+  Delivering = 'DELIVERING',
+  Loaded = 'LOADED',
+  Loading = 'LOADING',
+  Moving = 'MOVING',
+  Pending = 'PENDING'
+}
+
 export type Load = {
   readonly assignedTo: Maybe<Scalars['String']>;
   readonly brokerId: Scalars['String'];
@@ -170,10 +193,16 @@ export type LoadModifiedOutput = {
   readonly trailerNo: Maybe<Scalars['String']>;
 };
 
-/** Receiver infomation */
+/** Receiver information */
 export type ReceiverOutput = {
   /** Address of the receiver */
   readonly address: AddressOutput;
+  /** Arrival at the receiver */
+  readonly arrival: Maybe<Scalars['String']>;
+  /** Delivery appointment date and time */
+  readonly deliveryAppointment: Maybe<Scalars['String']>;
+  /** Depart at the receiver */
+  readonly depart: Maybe<Scalars['String']>;
   /** Email of the receiver */
   readonly email: Maybe<Scalars['String']>;
   /** Phone number of the receiver */
@@ -182,14 +211,20 @@ export type ReceiverOutput = {
   readonly receiverName: Scalars['String'];
 };
 
-/** Shipper infomation */
+/** Shipper information */
 export type ShipperOutput = {
   /** Address of the shipper */
   readonly address: AddressOutput;
+  /** Arrival at the shipper */
+  readonly arrival: Maybe<Scalars['String']>;
+  /** Depart at the shipper */
+  readonly depart: Maybe<Scalars['String']>;
   /** Email of the shipper */
   readonly email: Maybe<Scalars['String']>;
   /** Phone number of the shipper */
   readonly phoneNumber: Maybe<Scalars['String']>;
+  /** Pick up appointment date and time */
+  readonly pickUpAppointment: Maybe<Scalars['String']>;
   /** The name of the shipper */
   readonly shipperName: Scalars['String'];
 };
@@ -250,14 +285,12 @@ export type FindAssignedTripsQueryVariables = Exact<{
 }>;
 
 
-export type FindAssignedTripsQuery = { 
-  readonly findAssignedTrips: ReadonlyArray<{ 
-    readonly id: string, readonly state: string, 
-    readonly tripId: number, readonly assignedTo: 
-    string, readonly totalMiles: number | null, 
-    readonly bol: ReadonlyArray<string | null> | null, 
-    readonly pod: ReadonlyArray<string | null> | null, 
-    readonly tripInfo: ReadonlyArray<{ 
-      readonly id: string, readonly assignedTo: string | null, 
-      readonly commodity: string | null, readonly poNumber: string | null, 
-      readonly brokerId: string | null, readonly hazmat: boolean, readonly specialInstructions: string | null, readonly trailerNo: string | null, readonly totalWeight: string | null, readonly shipper: ReadonlyArray<{ readonly shipperName: string, readonly phoneNumber: string | null, readonly email: string | null, readonly address: { readonly unitNumber: string, readonly streetName: string, readonly city: string, readonly state: string, readonly postalCode: string, readonly country: string | null } } | null>, readonly receiver: ReadonlyArray<{ readonly receiverName: string, readonly phoneNumber: string | null, readonly email: string | null, readonly address: { readonly unitNumber: string, readonly streetName: string, readonly city: string, readonly state: string, readonly postalCode: string, readonly country: string | null } } | null> } | null> } | null> | null };
+export type FindAssignedTripsQuery = { readonly findAssignedTrips: ReadonlyArray<{ readonly id: string, readonly state: string, readonly tripId: number, readonly assignedTo: string, readonly totalMiles: number | null, readonly bol: ReadonlyArray<string | null> | null, readonly pod: ReadonlyArray<string | null> | null, readonly tripInfo: ReadonlyArray<{ readonly id: string, readonly assignedTo: string | null, readonly commodity: string | null, readonly poNumber: string | null, readonly brokerId: string | null, readonly hazmat: boolean, readonly specialInstructions: string | null, readonly trailerNo: string | null, readonly totalWeight: string | null, readonly shipper: ReadonlyArray<{ readonly shipperName: string, readonly phoneNumber: string | null, readonly email: string | null, readonly address: { readonly unitNumber: string, readonly streetName: string, readonly city: string, readonly state: string, readonly postalCode: string, readonly country: string | null } } | null>, readonly receiver: ReadonlyArray<{ readonly receiverName: string, readonly phoneNumber: string | null, readonly email: string | null, readonly address: { readonly unitNumber: string, readonly streetName: string, readonly city: string, readonly state: string, readonly postalCode: string, readonly country: string | null } } | null> } | null> } | null> | null };
+
+export type ResponseToTripMutationVariables = Exact<{
+  driverResponse: DriverResponseEnum;
+  id: Scalars['ID'];
+}>;
+
+
+export type ResponseToTripMutation = { readonly responseToTrip: { readonly id: string, readonly tripId: number, readonly state: string, readonly totalMiles: number | null } | null };

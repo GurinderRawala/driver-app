@@ -4,8 +4,6 @@ import { View } from "react-native";
 import { LoadModifiedOutput, ShipperOutput, ReceiverOutput } from "generated/graphql";
 import { PMCard } from "components/cards";
 import { PMText } from "components/shared";
-import { PMStoreState } from "store";
-import { useSelector } from "react-redux";
 import { useTripsCardStyles } from "./styles";
 import { LoadInfo } from "./load-info";
 import { pick } from "lodash";
@@ -17,14 +15,13 @@ export interface LoadCardProps{
     tripInfo: LoadModifiedOutput;
 }
 export const LoadCard: FC<LoadCardProps> = ({tripInfo}) =>{
-    const layout = useSelector(({layoutReducer}: PMStoreState) => layoutReducer);
-    const styles = useTripsCardStyles(layout);
+    const styles = useTripsCardStyles();
 
     const { shipper, receiver } = tripInfo;
 
     return (
         <>
-            <PMCard containerStyle={styles.container}>
+            <PMCard>
                 <Card.Title style={{ fontFamily: "TitilliumRegular"}}>Pick up</Card.Title>
                 <Card.Divider />
                 <View style={styles.body}>
@@ -44,7 +41,7 @@ export const LoadCard: FC<LoadCardProps> = ({tripInfo}) =>{
                 />
             </PMCard>
 
-            <PMCard containerStyle={styles.container}>
+            <PMCard>
                 <Card.Title style={{ fontFamily: "TitilliumRegular"}}>Delivery</Card.Title>
                 <Card.Divider />
                 <View style={styles.body}>

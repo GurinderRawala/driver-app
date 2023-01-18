@@ -7,6 +7,7 @@ import { FlatList, View } from "react-native";
 import { LoadCard } from "./components/load-card";
 import { FindAssignedTripsQuery, LoadModifiedOutput } from "generated/graphql";
 import { PMLoadingOrError, PMText, PMView } from "components/shared";
+import { TripActionButton } from "./components/trip-action-button";
 
 export const TripsTab: FC = () =>{
     const s = useTripsTabStyle();
@@ -42,6 +43,8 @@ export const TripsTab: FC = () =>{
                     />
                 )
             }
+
+            <TripActionButton />
         </PMView>
     )
 }
