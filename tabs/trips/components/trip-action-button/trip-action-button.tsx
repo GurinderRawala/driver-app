@@ -1,16 +1,26 @@
 import { ThemeConsumer, ThemeOptions } from '@rneui/themed'
 import { PMCard } from 'components/cards'
-import { PMButton } from 'components/pm-button';
+import { PMButton, PMButtonProps } from 'components/pm-button';
 import React,{ FC } from 'react'
 import {StyleSheet } from 'react-native';
 
-export const TripActionButton: FC = () => (
+export interface TripActionButtonProps{
+    acceptButtonProps: Omit<PMButtonProps, "color">
+    rejectButtonProps: Omit<PMButtonProps, "color">
+}
+
+export const TripActionButton: FC<TripActionButtonProps> = (
+    {
+        acceptButtonProps,
+        rejectButtonProps
+    }
+) => (
     <ThemeConsumer>
         {
             ({ theme }) => (
                 <PMCard containerStyle={tripActionButtonStyles(theme).container} wrapperStyle={tripActionButtonStyles(theme).buttonWrapper}>
-                    <PMButton  color="primary">Accept</PMButton>
-                    <PMButton  color="secondary">Reject</PMButton>
+                    <PMButton  color="primary" { ...acceptButtonProps }>Accept</PMButton>
+                    <PMButton  color="secondary" { ...rejectButtonProps }>Reject</PMButton>
                 </PMCard>
             )
         }

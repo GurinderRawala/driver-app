@@ -2,7 +2,7 @@ import { makeStyles } from "@rneui/themed";
 
 export const useStyles = makeStyles((theme) => ({
     text: {
-        fontFamily: "TitilliumRegular",
+        fontFamily: "Titillium",
         color: theme.colors.black,
     },
     view: {

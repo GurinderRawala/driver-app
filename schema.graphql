@@ -68,11 +68,13 @@ type driverMutations {
 
 enum driverResponseEnum {
   CREATED
+  ASSIGNED
   PENDING
   ACCEPTED
-  MOVING
+  REJECTED
   LOADING
   LOADED
+  MOVING
   DELIVERING
   DELIVERED
 }
@@ -143,7 +145,7 @@ type loadModifiedOutput {
   hazmat: Boolean!
 
   """Po number (poNumber: string)"""
-  poNumber: String
+  poNumber: String!
 
   """Special instructions (specialInstructions: string)"""
   specialInstructions: String

@@ -1,22 +1,28 @@
 import React, { FC } from "react";
 import { Card, makeStyles } from "@rneui/themed";
-import { useAssignedTrips } from "./hooks";
+import { UseAssignedTripsReturn, UseResponseToTripReturn, useAssignedTrips, useResponseToTrip } from "./hooks";
 
 import { FlatList, View } from "react-native";
 
 import { LoadCard } from "./components/load-card";
-import { FindAssignedTripsQuery, LoadModifiedOutput } from "generated/graphql";
+import { FindAssignedTripsQuery, LoadModifiedOutput, DriverResponseEnum } from "generated/graphql";
 import { PMLoadingOrError, PMText, PMView } from "components/shared";
 import { TripActionButton } from "./components/trip-action-button";
 
+export type AssignedTrip = FindAssignedTripsQuery["findAssignedTrips"][number];
+
 export const TripsTab: FC = () =>{
     const s = useTripsTabStyle();
-    const { data, isError, isLoading } = useAssignedTrips();
+    const { data, isError, isLoading, refetchTrips } = useAssignedTrips();
+    const { updateTripState  } = useResponseToTrip();
+
+    const acceptRejectOnPress = useAcceptRejectTripButton(updateTripState, refetchTrips)
+
     if(isLoading || isError){
         return <PMLoadingOrError isError={isError} isLoading={isLoading} />
     }
 
-    const renderItem = ({item}:{ item: FindAssignedTripsQuery["findAssignedTrips"][number] }) =>{
+    const renderItem = ({item}:{ item: AssignedTrip }) =>{
     
         return (
             <View>
@@ -27,6 +33,26 @@ export const TripsTab: FC = () =>{
                     renderItem={({item}) => <LoadCard tripInfo={item as LoadModifiedOutput} key={item.id}/>}
                     keyExtractor={(item) => item?.id}
                 />
+                {
+                    item.state === "CREATED" && (
+                        <TripActionButton 
+                            acceptButtonProps={
+                                {
+                                    onPress: () => {
+                                        acceptRejectOnPress(item.id, DriverResponseEnum.Accepted)
+                                    }
+                                }
+                            }
+                            rejectButtonProps={
+                                {
+                                    onPress: () =>{
+                                        acceptRejectOnPress(item.id, DriverResponseEnum.Rejected)
+                                    }
+                                }
+                            }
+                        />
+                    )
+                }
             </View>
         )
     }
@@ -43,10 +69,26 @@ export const TripsTab: FC = () =>{
                     />
                 )
             }
-
-            <TripActionButton />
         </PMView>
     )
+}
+
+
+export const useAcceptRejectTripButton = (updateTripState: UseResponseToTripReturn["updateTripState"], refetch: UseAssignedTripsReturn["refetchTrips"] ) => {
+    return (id: AssignedTrip["id"], driverResponse: DriverResponseEnum) => {
+        updateTripState({
+            id,
+            driverResponse,
+        }, {
+            onSuccess: () => {
+                refetch();
+                console.log("Successfully updated");
+            },
+            onError: (error) => {
+                console.log("Failed to update", {error});
+            }
+        })
+    }
 }
 
 export const useTripsTabStyle =  makeStyles(

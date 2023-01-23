@@ -2,7 +2,9 @@ import { Button, ButtonProps } from "@rneui/themed";
 import { merge } from "lodash";
 import React, { FC } from "react";
 
-export const PMButton: FC<Omit<ButtonProps, "radius">> = (props) => (
+export type PMButtonProps = Omit<ButtonProps, "radius">;
+
+export const PMButton: FC<PMButtonProps> = (props) => (
     <Button { ...{ ...merge({}, props, buttonCommonProps) }}/>
 )
 

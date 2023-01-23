@@ -18,9 +18,9 @@ export const PMScrollView: FC<ScrollViewProps> = (props) =>{
     const assignableProps: ScrollViewProps = {
         ...props,
         style: merge({}, props.style, style.view, {paddingTop: SCROLL_VIEW_DEFAULT_PADDING}),
-        onLayout: (e: LayoutChangeEvent) => {
+        onLayout: async (e: LayoutChangeEvent) => {
             onStoreLayout(e);
-            onLayoutRootView()
+            await onLayoutRootView()
         }
     }
     if(!isFontLoaded){
@@ -38,9 +38,9 @@ export const PMView: FC<ViewProps> = (props) =>{
     const assignableProps: ViewProps = {
         ...props,
         style: merge({}, props.style, style.view),
-        onLayout: (e: LayoutChangeEvent) => {
+        onLayout: async (e: LayoutChangeEvent) => {
             onStoreLayout(e);
-            onLayoutRootView()
+            await onLayoutRootView()
         }
     }
 

@@ -30,7 +30,7 @@ export const useGqlMutation = <
     ) =>
         useMutation<TData, TError, TVariables, TContext>({
             ...options,
-            mutationFn: (data) => gqlRequest(mutationQuery, { input: data }),
+            mutationFn: (data) => gqlRequest(mutationQuery, data),
         });
 
 export const useGqlQuery = <

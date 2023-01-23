@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -12,6 +11,7 @@ export type Scalars = {
   Int: number;
   Float: number;
   /** A special custom Scalar type for Dates that converts to a ISO formatted string  */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   Date: any;
 };
 
@@ -114,13 +114,15 @@ export type DriverMutationsResponseToTripArgs = {
 
 export enum DriverResponseEnum {
   Accepted = 'ACCEPTED',
+  Assigned = 'ASSIGNED',
   Created = 'CREATED',
   Delivered = 'DELIVERED',
   Delivering = 'DELIVERING',
   Loaded = 'LOADED',
   Loading = 'LOADING',
   Moving = 'MOVING',
-  Pending = 'PENDING'
+  Pending = 'PENDING',
+  Rejected = 'REJECTED'
 }
 
 export type Load = {
@@ -178,7 +180,7 @@ export type LoadModifiedOutput = {
   /** The uuid of load, automatically generated if not provided */
   readonly id: Scalars['ID'];
   /** Po number (poNumber: string) */
-  readonly poNumber: Maybe<Scalars['String']>;
+  readonly poNumber: Scalars['String'];
   /** List of receivers (receiver: [string]) */
   readonly receiver: ReadonlyArray<Maybe<ReceiverOutput>>;
   /** List of shippers (shipper: [string]) */
@@ -285,7 +287,7 @@ export type FindAssignedTripsQueryVariables = Exact<{
 }>;
 
 
-export type FindAssignedTripsQuery = { readonly findAssignedTrips: ReadonlyArray<{ readonly id: string, readonly state: string, readonly tripId: number, readonly assignedTo: string, readonly totalMiles: number | null, readonly bol: ReadonlyArray<string | null> | null, readonly pod: ReadonlyArray<string | null> | null, readonly tripInfo: ReadonlyArray<{ readonly id: string, readonly assignedTo: string | null, readonly commodity: string | null, readonly poNumber: string | null, readonly brokerId: string | null, readonly hazmat: boolean, readonly specialInstructions: string | null, readonly trailerNo: string | null, readonly totalWeight: string | null, readonly shipper: ReadonlyArray<{ readonly shipperName: string, readonly phoneNumber: string | null, readonly email: string | null, readonly address: { readonly unitNumber: string, readonly streetName: string, readonly city: string, readonly state: string, readonly postalCode: string, readonly country: string | null } } | null>, readonly receiver: ReadonlyArray<{ readonly receiverName: string, readonly phoneNumber: string | null, readonly email: string | null, readonly address: { readonly unitNumber: string, readonly streetName: string, readonly city: string, readonly state: string, readonly postalCode: string, readonly country: string | null } } | null> } | null> } | null> | null };
+export type FindAssignedTripsQuery = { readonly findAssignedTrips: ReadonlyArray<{ readonly id: string, readonly state: string, readonly tripId: number, readonly assignedTo: string, readonly totalMiles: number | null, readonly bol: ReadonlyArray<string | null> | null, readonly pod: ReadonlyArray<string | null> | null, readonly tripInfo: ReadonlyArray<{ readonly id: string, readonly assignedTo: string | null, readonly commodity: string | null, readonly poNumber: string, readonly brokerId: string | null, readonly hazmat: boolean, readonly specialInstructions: string | null, readonly trailerNo: string | null, readonly totalWeight: string | null, readonly shipper: ReadonlyArray<{ readonly shipperName: string, readonly phoneNumber: string | null, readonly email: string | null, readonly address: { readonly unitNumber: string, readonly streetName: string, readonly city: string, readonly state: string, readonly postalCode: string, readonly country: string | null } } | null>, readonly receiver: ReadonlyArray<{ readonly receiverName: string, readonly phoneNumber: string | null, readonly email: string | null, readonly address: { readonly unitNumber: string, readonly streetName: string, readonly city: string, readonly state: string, readonly postalCode: string, readonly country: string | null } } | null> } | null> } | null> | null };
 
 export type ResponseToTripMutationVariables = Exact<{
   driverResponse: DriverResponseEnum;

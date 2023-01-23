@@ -1,16 +1,33 @@
-import { useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
 import * as SplashScreen from 'expo-splash-screen';
-import { useFonts } from "expo-font";
+import * as font from "expo-font";
 
 import { PER_MILES_FONT } from "assets/font";
 
 SplashScreen.preventAutoHideAsync();
 
 export const useLoadExpoFont = () =>{
-    const [isFontLoaded] = useFonts(PER_MILES_FONT)
+    const [isFontLoaded, setFontLoaded] = useState<boolean>(false);
+
+    const loadFont = async () => {
+        try{
+            await font.loadAsync(PER_MILES_FONT)
+            setFontLoaded(true)
+        }catch(err){
+            console.error(err);
+            setFontLoaded(false)
+        }
+    }
+
+    useEffect(
+        () =>{
+            loadFont()
+        },[]
+    )
+
     const onLayoutRootView = useCallback(async () => {
         if (isFontLoaded) {
-            await SplashScreen.hideAsync();
+            return await SplashScreen.hideAsync();
         }
     }, [isFontLoaded]);
 

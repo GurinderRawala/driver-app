@@ -1,7 +1,7 @@
 import { gql } from "graphql-request";
 import { useGqlMutation, useGqlQuery } from "api";
 import { QUERY_KEY } from "../../contants";
-import { FindAssignedTripsQuery, ResponseToTripMutation } from "generated/graphql";
+import { FindAssignedTripsQuery, ResponseToTripMutation, ResponseToTripMutationVariables } from "generated/graphql";
 import { GraphQLError } from "graphql";
 import { QueryObserverResult, RefetchOptions, RefetchQueryFilters, UseMutateFunction } from "react-query";
 
@@ -61,13 +61,16 @@ query findAssignedTrips(
 }
 `;
 
-export type UseAssignedTrips = () => {
+
+export type UseAssignedTripsReturn = {
     data: FindAssignedTripsQuery | undefined;
     isError: boolean;
     error: GraphQLError | null;
     isLoading: boolean;
 	refetchTrips: <TPageData>(options?: RefetchOptions & RefetchQueryFilters<TPageData>) => Promise<QueryObserverResult<FindAssignedTripsQuery, GraphQLError>>
-}
+};
+
+export type UseAssignedTrips = () => UseAssignedTripsReturn;
 
 export const useAssignedTrips: UseAssignedTrips = () => {
     const { data, isError, error, isLoading, refetch } = useGqlQuery<FindAssignedTripsQuery>([QUERY_KEY.ASSIGNED_TRIPS, findAssignedTripsGQL], findAssignedTripsGQL, { orderBy: "DESC" });
@@ -96,15 +99,17 @@ export const responseToTripGQL = gql`
 	}
 `;
 
-export type UseResponseToTrip = () => {
-	updateTripState: UseMutateFunction<ResponseToTripMutation, unknown, ResponseToTripMutation, unknown>;
+export type UseResponseToTripReturn = {
+	updateTripState: UseMutateFunction<ResponseToTripMutation, unknown, ResponseToTripMutationVariables, unknown>;
 	data: ResponseToTripMutation;
 	isError: boolean;
 	isLoading: boolean;
-}
+};
+
+export type UseResponseToTrip = () => UseAssignedTripsReturn;
 
 export const useResponseToTrip = () =>{
-    const { mutate, data, isError, isLoading } = useGqlMutation<ResponseToTripMutation, unknown, ResponseToTripMutation>(responseToTripGQL)
+    const { mutate, data, isError, isLoading } = useGqlMutation<ResponseToTripMutation, unknown, ResponseToTripMutationVariables>(responseToTripGQL)
 
     return{
         updateTripState: mutate,

@@ -22,7 +22,7 @@ export const LoadCard: FC<LoadCardProps> = ({tripInfo}) =>{
     return (
         <>
             <PMCard>
-                <Card.Title style={{ fontFamily: "TitilliumRegular"}}>Pick up</Card.Title>
+                <Card.Title style={{ fontFamily: "Titillium"}}>Pick up</Card.Title>
                 <Card.Divider />
                 <View style={styles.body}>
                     {
@@ -42,7 +42,7 @@ export const LoadCard: FC<LoadCardProps> = ({tripInfo}) =>{
             </PMCard>
 
             <PMCard>
-                <Card.Title style={{ fontFamily: "TitilliumRegular"}}>Delivery</Card.Title>
+                <Card.Title style={{ fontFamily: "Titillium"}}>Delivery</Card.Title>
                 <Card.Divider />
                 <View style={styles.body}>
                     {
