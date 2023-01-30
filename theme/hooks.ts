@@ -9,21 +9,19 @@ SplashScreen.preventAutoHideAsync();
 export const useLoadExpoFont = () =>{
     const [isFontLoaded, setFontLoaded] = useState<boolean>(false);
 
-    const loadFont = async () => {
-        try{
-            await font.loadAsync(PER_MILES_FONT)
-            setFontLoaded(true)
-        }catch(err){
-            console.error(err);
-            setFontLoaded(false)
+    useEffect(() => {
+        const loadFont = async () => {
+            try{
+                await font.loadAsync(PER_MILES_FONT)
+                setFontLoaded(true)
+            }catch(err){
+                console.error({err}, "Failed to load");
+                setFontLoaded(false)
+            }
         }
-    }
 
-    useEffect(
-        () =>{
-            loadFont()
-        },[]
-    )
+        loadFont();
+    }, [setFontLoaded])
 
     const onLayoutRootView = useCallback(async () => {
         if (isFontLoaded) {

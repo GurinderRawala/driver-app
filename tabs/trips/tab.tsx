@@ -1,6 +1,6 @@
 import React, { FC } from "react";
 import { Card, makeStyles } from "@rneui/themed";
-import { UseAssignedTripsReturn, UseResponseToTripReturn, useAssignedTrips, useResponseToTrip } from "./hooks";
+import { UseAssignedTripsReturn, useAssignedTrips, useResponseToTrip } from "./hooks";
 
 import { FlatList, View } from "react-native";
 
@@ -14,9 +14,8 @@ export type AssignedTrip = FindAssignedTripsQuery["findAssignedTrips"][number];
 export const TripsTab: FC = () =>{
     const s = useTripsTabStyle();
     const { data, isError, isLoading, refetchTrips } = useAssignedTrips();
-    const { updateTripState  } = useResponseToTrip();
 
-    const acceptRejectOnPress = useAcceptRejectTripButton(updateTripState, refetchTrips)
+    const acceptRejectOnPress = useAcceptRejectTripButton(refetchTrips)
 
     if(isLoading || isError){
         return <PMLoadingOrError isError={isError} isLoading={isLoading} />
@@ -34,7 +33,7 @@ export const TripsTab: FC = () =>{
                     keyExtractor={(item) => item?.id}
                 />
                 {
-                    item.state === "CREATED" && (
+                    item.state === "ASSIGNED" && (
                         <TripActionButton 
                             acceptButtonProps={
                                 {
@@ -74,7 +73,8 @@ export const TripsTab: FC = () =>{
 }
 
 
-export const useAcceptRejectTripButton = (updateTripState: UseResponseToTripReturn["updateTripState"], refetch: UseAssignedTripsReturn["refetchTrips"] ) => {
+export const useAcceptRejectTripButton = (refetch: UseAssignedTripsReturn["refetchTrips"] ) => {
+    const { updateTripState  } = useResponseToTrip();
     return (id: AssignedTrip["id"], driverResponse: DriverResponseEnum) => {
         updateTripState({
             id,

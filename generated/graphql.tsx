@@ -102,7 +102,16 @@ export type Driver = {
 
 /** Driver app mutations */
 export type DriverMutations = {
+  readonly reportArrivalOrDepart: Maybe<LoadModifiedOutput>;
   readonly responseToTrip: Maybe<TripModifiedOutput>;
+};
+
+
+/** Driver app mutations */
+export type DriverMutationsReportArrivalOrDepartArgs = {
+  input: ReportArrivalOrDepartInput;
+  loadID: Scalars['ID'];
+  stopID: Scalars['ID'];
 };
 
 
@@ -211,6 +220,16 @@ export type ReceiverOutput = {
   readonly phoneNumber: Maybe<Scalars['String']>;
   /** The name of the receiver */
   readonly receiverName: Scalars['String'];
+  /** StopID(uuid) for the receiver */
+  readonly stopID: Scalars['ID'];
+};
+
+/** Arrival or departure timestamp input */
+export type ReportArrivalOrDepartInput = {
+  /** Arrival timestamp */
+  readonly arrival: InputMaybe<Scalars['String']>;
+  /** Depart timestamp */
+  readonly depart: InputMaybe<Scalars['String']>;
 };
 
 /** Shipper information */
@@ -229,6 +248,8 @@ export type ShipperOutput = {
   readonly pickUpAppointment: Maybe<Scalars['String']>;
   /** The name of the shipper */
   readonly shipperName: Scalars['String'];
+  /** StopID(uuid) for the shipper */
+  readonly stopID: Scalars['ID'];
 };
 
 export type Trailer = {
@@ -287,7 +308,7 @@ export type FindAssignedTripsQueryVariables = Exact<{
 }>;
 
 
-export type FindAssignedTripsQuery = { readonly findAssignedTrips: ReadonlyArray<{ readonly id: string, readonly state: string, readonly tripId: number, readonly assignedTo: string, readonly totalMiles: number | null, readonly bol: ReadonlyArray<string | null> | null, readonly pod: ReadonlyArray<string | null> | null, readonly tripInfo: ReadonlyArray<{ readonly id: string, readonly assignedTo: string | null, readonly commodity: string | null, readonly poNumber: string, readonly brokerId: string | null, readonly hazmat: boolean, readonly specialInstructions: string | null, readonly trailerNo: string | null, readonly totalWeight: string | null, readonly shipper: ReadonlyArray<{ readonly shipperName: string, readonly phoneNumber: string | null, readonly email: string | null, readonly address: { readonly unitNumber: string, readonly streetName: string, readonly city: string, readonly state: string, readonly postalCode: string, readonly country: string | null } } | null>, readonly receiver: ReadonlyArray<{ readonly receiverName: string, readonly phoneNumber: string | null, readonly email: string | null, readonly address: { readonly unitNumber: string, readonly streetName: string, readonly city: string, readonly state: string, readonly postalCode: string, readonly country: string | null } } | null> } | null> } | null> | null };
+export type FindAssignedTripsQuery = { readonly findAssignedTrips: ReadonlyArray<{ readonly id: string, readonly state: string, readonly tripId: number, readonly assignedTo: string, readonly totalMiles: number | null, readonly bol: ReadonlyArray<string | null> | null, readonly pod: ReadonlyArray<string | null> | null, readonly tripInfo: ReadonlyArray<{ readonly id: string, readonly assignedTo: string | null, readonly commodity: string | null, readonly poNumber: string, readonly brokerId: string | null, readonly hazmat: boolean, readonly specialInstructions: string | null, readonly trailerNo: string | null, readonly totalWeight: string | null, readonly shipper: ReadonlyArray<{ readonly stopID: string, readonly shipperName: string, readonly phoneNumber: string | null, readonly email: string | null, readonly arrival: string | null, readonly depart: string | null, readonly address: { readonly unitNumber: string, readonly streetName: string, readonly city: string, readonly state: string, readonly postalCode: string, readonly country: string | null } } | null>, readonly receiver: ReadonlyArray<{ readonly stopID: string, readonly receiverName: string, readonly phoneNumber: string | null, readonly email: string | null, readonly arrival: string | null, readonly depart: string | null, readonly address: { readonly unitNumber: string, readonly streetName: string, readonly city: string, readonly state: string, readonly postalCode: string, readonly country: string | null } } | null> } | null> } | null> | null };
 
 export type ResponseToTripMutationVariables = Exact<{
   driverResponse: DriverResponseEnum;
@@ -296,3 +317,12 @@ export type ResponseToTripMutationVariables = Exact<{
 
 
 export type ResponseToTripMutation = { readonly responseToTrip: { readonly id: string, readonly tripId: number, readonly state: string, readonly totalMiles: number | null } | null };
+
+export type ReportArrivalOrDepartMutationVariables = Exact<{
+  input: ReportArrivalOrDepartInput;
+  loadID: Scalars['ID'];
+  stopID: Scalars['ID'];
+}>;
+
+
+export type ReportArrivalOrDepartMutation = { readonly reportArrivalOrDepart: { readonly id: string, readonly shipper: ReadonlyArray<{ readonly stopID: string, readonly shipperName: string, readonly arrival: string | null, readonly depart: string | null } | null>, readonly receiver: ReadonlyArray<{ readonly stopID: string, readonly receiverName: string, readonly arrival: string | null, readonly depart: string | null } | null> } | null };

@@ -1,7 +1,7 @@
 import { gql } from "graphql-request";
 import { useGqlMutation, useGqlQuery } from "api";
 import { QUERY_KEY } from "../../contants";
-import { FindAssignedTripsQuery, ResponseToTripMutation, ResponseToTripMutationVariables } from "generated/graphql";
+import { FindAssignedTripsQuery, ReportArrivalOrDepartMutation, ReportArrivalOrDepartMutationVariables, ResponseToTripMutation, ResponseToTripMutationVariables } from "generated/graphql";
 import { GraphQLError } from "graphql";
 import { QueryObserverResult, RefetchOptions, RefetchQueryFilters, UseMutateFunction } from "react-query";
 
@@ -30,6 +30,7 @@ query findAssignedTrips(
 			hazmat
 			specialInstructions
 			shipper{
+				stopID
 				shipperName 
 				address{
 					unitNumber 
@@ -41,8 +42,11 @@ query findAssignedTrips(
 			 } 
 				phoneNumber 
 				email
+				arrival
+				depart
 			}
 			receiver{
+				stopID
 				receiverName 
 				address{
 					unitNumber 
@@ -53,6 +57,8 @@ query findAssignedTrips(
 				} 
 				phoneNumber 
 				email
+				arrival
+				depart
 			}
 			trailerNo
 			totalWeight
@@ -113,6 +119,62 @@ export const useResponseToTrip = () =>{
 
     return{
         updateTripState: mutate,
+        data,
+        isError,
+        isLoading
+    }
+}
+
+
+export const reportArrivalOrDepartGQL = gql`
+	mutation reportArrivalOrDepart(
+		$input: reportArrivalOrDepartInput!
+		$loadID: ID!
+		$stopID: ID!
+	){
+		reportArrivalOrDepart(
+			input: $input
+			loadID: $loadID
+			stopID: $stopID
+		){
+			id
+			shipper{
+				stopID
+				shipperName
+				arrival
+				depart
+			  }
+			  
+			  receiver{
+				stopID
+				receiverName
+				arrival
+				depart
+			  }
+		}
+	}
+
+`;
+
+export type UseReportArrivalOrDepartReturn = {
+	reportArrivalOrDepart: UseMutateFunction<ReportArrivalOrDepartMutation, unknown, ReportArrivalOrDepartMutationVariables, unknown>;
+	data: ReportArrivalOrDepartMutation;
+	isError: boolean;
+	isLoading: boolean;
+};
+
+
+export const useReportArrivalOrDepart = (): UseReportArrivalOrDepartReturn => {
+    const { mutate, data, isError, isLoading } = 
+	useGqlMutation<
+	ReportArrivalOrDepartMutation, 
+	unknown, 
+	ReportArrivalOrDepartMutationVariables
+	>(reportArrivalOrDepartGQL);
+
+	
+    return{
+        reportArrivalOrDepart: mutate,
         data,
         isError,
         isLoading

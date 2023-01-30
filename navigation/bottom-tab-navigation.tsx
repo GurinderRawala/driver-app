@@ -1,7 +1,7 @@
 import { BottomTabNavigationOptions, createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import React, { FC } from 'react';
 import { useTheme } from '@rneui/themed';
-import { tripsTabConfig } from '../tabs';
+import { tripsTabConfig } from 'tabs';
 import { RootStackParamList } from './types';
 
 const Tab = createBottomTabNavigator<RootStackParamList>();

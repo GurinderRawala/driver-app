@@ -64,6 +64,16 @@ type driverMutations {
     """Trip uuid which is updating"""
     id: ID!
   ): TripModifiedOutput
+  reportArrivalOrDepart(
+    """Report arrival or departure by StopID"""
+    input: reportArrivalOrDepartInput!
+
+    """Load uuid which is updating"""
+    loadID: ID!
+
+    """stop id which is updating"""
+    stopID: ID!
+  ): loadModifiedOutput
 }
 
 enum driverResponseEnum {
@@ -188,6 +198,9 @@ type Query {
 
 """Receiver information"""
 type receiverOutput {
+  """StopID(uuid) for the receiver"""
+  stopID: ID!
+
   """The name of the receiver"""
   receiverName: String!
 
@@ -210,8 +223,20 @@ type receiverOutput {
   deliveryAppointment: String
 }
 
+"""Arrival or departure timestamp input"""
+input reportArrivalOrDepartInput {
+  """Arrival timestamp"""
+  arrival: String
+
+  """Depart timestamp"""
+  depart: String
+}
+
 """Shipper information"""
 type shipperOutput {
+  """StopID(uuid) for the shipper"""
+  stopID: ID!
+
   """The name of the shipper"""
   shipperName: String!
 
